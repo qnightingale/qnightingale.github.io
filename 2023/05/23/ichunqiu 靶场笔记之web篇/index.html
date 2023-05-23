@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ichunqiu 靶场笔记之web篇 | qnightingale's home</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}</style><meta name="generator" content="Hexo 6.3.0"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>ichunqiu 靶场笔记之web篇</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-23T14:34:24.000Z" id="date"> 2023-05-23</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-05-23T15:07:01.934Z" id="updated"> 2023-05-23</time></div></span><br><span>Word Count: <div class="control">543</div></span><br><span>Read Time: <div class="control">1 min</div></span></div></div><hr><div id="post-content"><h1 id="2016全国大学生信息安全竞赛—文件上传"><a href="#2016全国大学生信息安全竞赛—文件上传" class="headerlink" title="2016全国大学生信息安全竞赛—文件上传"></a>2016全国大学生信息安全竞赛—文件上传</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>最近练习web类型的题目，正好i春秋的题库没做过，找个简单一点的试试手~</p>
+<blockquote>
+<p>注：本博客仅供学习使用,请勿非法用途</p>
+</blockquote>
+<h2 id="开始做题"><a href="#开始做题" class="headerlink" title="开始做题"></a>开始做题</h2><p>打开题目给的站点，发现有文件上传点</p>
+<p class='item-img' data-src='/images/20230331-1.png'><img src="/images/20230331-1.png" alt="文件上传"></p>
+<p>先上传个php文件看看有没有提示啥限制</p>
+<p class='item-img' data-src='/images/20230331-2.png'><img src="/images/20230331-2.png" alt="文件上传"></p>
+<p>哦吼，只允许jpg、png、gif、png文件上传，寄咯寄咯</p>
+<p>试试抓包修改文件后缀绕过，打开熟悉的配方–burpsuite抓包</p>
+<p class='item-img' data-src='/images/20230331-3.png'><img src="/images/20230331-3.png" alt="文件上传"></p>
+<p>将.jpg修改为.php，放行</p>
+<p class='item-img' data-src='/images/20230331-4.png'><img src="/images/20230331-4.png" alt="文件上传"></p>
+<p>哦吼，寄了寄了，再试试将.jpg修改成.jpg.php</p>
+<p class='item-img' data-src='/images/20230331-5.png'><img src="/images/20230331-5.png" alt="文件上传"></p>
+<p>淦，还是不行，往下翻翻，发现有源代码，出题人这么人性化吗</p>
+<p class='item-img' data-src='/images/20230331-6.png'><img src="/images/20230331-6.png" alt="文件上传"></p>
+<p>发现上传路径 upload&#x2F; ，再往下翻翻还有限制php文件的函数，我搞不定了，求助度娘</p>
+<p>参考了一下Sombra_Olivia大佬的文章,链接放下面了</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44573809/article/details/124446107">https://blog.csdn.net/weixin_44573809/article/details/124446107</a></p>
+<p>了解到，这里有个apache后缀名解析漏洞，嗯，果然又是我的知识盲区呢，再次求助度娘，这个漏洞是apache服务器会将php.*或者其他后缀的识别成.php文件运行。</p>
+<p>OK，在.jpg文件前面加上.php成.php.jpg，上传</p>
+<p class='item-img' data-src='/images/20230331-7.png'><img src="/images/20230331-7.png" alt="文件上传"></p>
+<p>没问题，很顺利上传了，正好刚刚获取到了上传文件的路径，访问一下</p>
+<p class='item-img' data-src='/images/20230331-8.png'><img src="/images/20230331-8.png" alt="文件上传"></p>
+<p>很好，flag出来了，用蚁剑试着连了一下，发现.php.jpg的后缀还是会识别成jpg文件，所以文件无法连接。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><p>apache对文件后缀名的识别是从后向前进行匹配的，以单个.作为分隔符。当遇到未知的文件后缀名时，会继续向前匹配，直到遇到可以识别的后缀名为止。例如，test.php.abcd apache会处理.abcd，但是.abcd是无法识别的，apache会向前解析.php，能被识别出来，所以test.php.abcd文件会被当成php文件进行识别。</p>
+</li>
+<li><p>文件上传类型比较多变，有时php的一句话马不能上传成功，需要配合服务器自身的漏洞来进行文件绕过。</p>
+</li>
+</ol>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages" style="justify-content: flex-end"><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="../%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8Cctf%E9%A2%98%E7%AC%94%E8%AE%B0%E4%B9%8BCrypto%E7%AF%87/">攻防世界ctf题笔记之Crypto篇 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/2.png" alt="Logo"></a><h1 id="Dr"><a href="/">qnightingale</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2016%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E7%AB%9E%E8%B5%9B%E2%80%94%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">1.</span> <span class="toc-text">2016全国大学生信息安全竞赛—文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-number">1.1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E5%81%9A%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">开始做题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>
